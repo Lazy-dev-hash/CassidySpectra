@@ -20,7 +20,7 @@
   "discordBotToken": "MTM3OTQzMDU1MzYwNTkwMjQwNw.GEa11b.BUnGJjSDIAUBx8nnH4yUcmTdX0V8p1AE-jPj_Y",
   "discordClientID": "",
   "pageAccessToken": "",
-  "pageVerifyToken": "",
+  "pageVerifyToken": "EAAZAqHuSVZCiwBOZCSrRi1Rv2i7ZAPi4bpw4YZC3AAffl9ZCwiJOJHFB9rZCwWQj7PQ8cxzfyVkIpUgCTZBMeeZBJHCB2vmeuZBsRTTuPq5dVt2VMSV5NZBsFV148HICQP4b3Jv3ANsWLz6Au8HRvj2IydjnmZB7aWVHLlIZCfo3ptbSTuwhS5PpZAXOnefsRbK7MFCMwg7s5FiJMZCOAZDZD",
   "mqttRestart": {
     "enabled": true,
     "interval": 3600000,
