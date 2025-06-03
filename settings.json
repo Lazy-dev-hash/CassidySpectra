@@ -41,7 +41,7 @@
     "forceLogin": true,
     "autoMarkDelivery": false,
     "autoMarkRead": false,
-    "autoReconnect": true,
+    "autoReconnect": false,
     "online": true,
     "emitReady": false,
     "randomUserAgent": false,
