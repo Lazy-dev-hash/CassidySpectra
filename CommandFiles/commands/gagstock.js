@@ -1,30 +1,29 @@
+// @ts-check
 import axios from "axios";
 import { sendMessage } from "../handles/sendMessage.js";
 
 const activeSessions = new Map();
 
+/**
+ * @type {CassidySpectra.CommandMeta}
+ */
 export const meta = {
   name: "gagstock",
-  otherNames: ["ggstock", "gag", "gg"],
-  author: "nelzy",
+  otherNames: ["ggstock", "gag"],
   version: "1.0.0",
-  description: "Track Grow A Garden stock and weather every 30s (notifies only on change).",
-  usage: "{prefix}gagstock on | off",
+  author: "nelzy // converted by MrkimstersDev",
+  permissions: [0],
   category: "Tools ⚒️",
-  noPrefix: "both",
-  permissions: [0, 1, 2],
-  botAdmin: false,
-  waitingTime: 5,
-  ext_plugins: {
-    output: "^1.0.0"
-  },
-  whiteList: [],
-  args: [],
-  supported: "^1.0.0"
+  description: "Track Grow A Garden stock + weather every 30s (notifies only on update)",
+  usage: "gagstock on | gagstock off",
+  fbOnly: true
 };
 
+/**
+ * @param {CommandContext} param0
+ */
 export async function entry({ input, output }) {
-  const senderId = input.sender?.id || input.sender;
+  const senderId = input.senderID || input.sender?.id;
   const args = input.args || [];
   const action = args[0]?.toLowerCase();
   const pageAccessToken = input.pageAccessToken;
@@ -36,7 +35,7 @@ export async function entry({ input, output }) {
       minute: "2-digit",
       second: "2-digit",
       hour12: true,
-      weekday: "short",
+      weekday: "short"
     });
 
   if (action === "off") {
@@ -44,27 +43,21 @@ export async function entry({ input, output }) {
     if (session) {
       clearInterval(session.interval);
       activeSessions.delete(senderId);
-      return await sendMessage(senderId, { text: "🛑 Gagstock tracking stopped." }, pageAccessToken);
+      return output.reply("🛑 Gagstock tracking stopped.");
     } else {
-      return await sendMessage(senderId, { text: "⚠️ You don't have an active gagstock session." }, pageAccessToken);
+      return output.reply("⚠️ You don't have an active gagstock session.");
     }
   }
 
   if (action !== "on") {
-    return await sendMessage(senderId, {
-      text: "📌 Usage:\n• `gagstock on` to start tracking\n• `gagstock off` to stop tracking"
-    }, pageAccessToken);
+    return output.reply("📌 Usage:\n• `gagstock on` to start tracking\n• `gagstock off` to stop tracking");
   }
 
   if (activeSessions.has(senderId)) {
-    return await sendMessage(senderId, {
-      text: "📡 You're already tracking Gagstock. Use `gagstock off` to stop."
-    }, pageAccessToken);
+    return output.reply("📡 You're already tracking Gagstock. Use `gagstock off` to stop.");
   }
 
-  await sendMessage(senderId, {
-    text: "✅ Gagstock tracking started! You'll be notified when stock or weather changes."
-  }, pageAccessToken);
+  output.reply("✅ Gagstock tracking started! You'll be notified when stock or weather changes.");
 
   const fetchAll = async () => {
     try {
@@ -104,7 +97,8 @@ export async function entry({ input, output }) {
       const weatherDesc = weather.currentWeather || "Unknown";
       const weatherBonus = weather.cropBonuses || "N/A";
 
-      const message = `🌾 𝗚𝗿𝗼𝘄 𝗔 𝗚𝗮𝗿𝗱𝗲𝗻 — 𝗡𝗲𝘄 𝗦𝘁𝗼𝗰𝗸 & 𝗪𝗲𝗮𝘁𝗵𝗲𝗿\n\n` +
+      const message =
+        `🌾 𝗚𝗿𝗼𝘄 𝗔 𝗚𝗮𝗿𝗱𝗲𝗻 — 𝗡𝗲𝘄 𝗦𝘁𝗼𝗰𝗸 & 𝗪𝗲𝗮𝘁𝗵𝗲𝗿\n\n` +
         `🛠️ 𝗚𝗲𝗮𝗿:\n${gearSeed.gear?.join("\n") || "No gear."}\n\n` +
         `🌱 𝗦𝗲𝗲𝗱𝘀:\n${gearSeed.seeds?.join("\n") || "No seeds."}\n\n` +
         `🥚 𝗘𝗴𝗴𝘀:\n${egg.egg?.join("\n") || "No eggs."}\n\n` +
